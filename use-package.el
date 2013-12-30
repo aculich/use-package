@@ -422,6 +422,7 @@ For full documentation. please see commentary.
 :ensure loads package using package.el if necessary."
   (use-package-validate-keywords args) ; error if any bad keyword, ignore result
   (let* ((commands (plist-get args :commands))
+         (min-version (plist-get args :min-version))
          (pre-init-body (plist-get args :pre-init))
          (pre-load-body (plist-get args :pre-load))
          (init-body (plist-get args :init))
@@ -547,6 +548,12 @@ For full documentation. please see commentary.
                   (t
                    pkg-load-path)))
 
+         (unless (package-installed-p ',name ,min-version)
+           (when (assoc ',name package-archive-contents)
+               (when use-package-archive-needs-refresh
+                 (package-refresh-contents)
+                 (setq use-package-archive-needs-refresh nil))
+               (package-install ',name)))
          (eval-when-compile
            (when (bound-and-true-p byte-compile-current-file)
              ,@defines-eval
