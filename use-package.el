@@ -284,6 +284,9 @@
   :type 'number
   :group 'use-package)
 
+(defvar use-package-archive-needs-refresh t
+  "Refresh package archives if non-nil.")
+
 (defmacro with-elapsed-timer (text &rest forms)
   (let ((body `(progn ,@forms)))
     (if use-package-verbose
